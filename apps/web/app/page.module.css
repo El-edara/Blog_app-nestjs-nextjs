@@ -1,0 +1,46 @@
+.animationGradient {
+  background: linear-gradient(-60deg, #032688, #7c3aed, #1d4ed8, #032688);
+  background-size: 300% 200%;
+  animation: bg 12s ease infinite;
+}
+
+@keyframes bg {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+/* @keyframes bg {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 150%;
+  }
+  100% {
+    background-position: 150% 200%;
+  }
+} */
+
+.textGradient {
+  background: linear-gradient(90deg, #135dfc, #cc62e7, #356be0);
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textGradient 4s linear infinite;
+}
+
+@keyframes textGradient {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
