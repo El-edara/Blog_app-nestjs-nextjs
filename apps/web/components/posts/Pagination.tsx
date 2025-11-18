@@ -1,3 +1,4 @@
+// components/ui/Pagination.tsx
 "use client";
 
 import Link from "next/link";
@@ -8,53 +9,42 @@ type Props = {
   currentPage: number;
   totalPages: number;
   total: number;
+  basePath?: string;
 };
 
-export default function Pagination({ currentPage, totalPages, total }: Props) {
+export default function Pagination({
+  currentPage,
+  totalPages,
+  total,
+  basePath = "",
+}: Props) {
   const searchParams = useSearchParams();
 
-  // Build URL with existing params
   const buildUrl = (page: number) => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set("page", String(page));
-    return `/posts?${params.toString()}`;
+    if (page === 1) params.delete("page");
+    else params.set("page", String(page));
+    const query = params.toString();
+    return basePath + (query ? `?${query}` : "");
   };
 
-  // Generate page numbers to show
   const getPageNumbers = () => {
     const pages: (number | string)[] = [];
-    const showPages = 5; // Show 5 pages at a time
+    const delta = 2;
 
-    if (totalPages <= showPages) {
-      // Show all pages if total is small
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(i);
-      }
-    } else {
-      // Always show first page
-      pages.push(1);
-
-      if (currentPage > 3) {
-        pages.push("...");
-      }
-
-      // Show pages around current page
-      const start = Math.max(2, currentPage - 1);
-      const end = Math.min(totalPages - 1, currentPage + 1);
-
-      for (let i = start; i <= end; i++) {
-        pages.push(i);
-      }
-
-      if (currentPage < totalPages - 2) {
-        pages.push("...");
-      }
-
-      // Always show last page
-      pages.push(totalPages);
+    pages.push(1);
+    if (currentPage > delta + 2) pages.push("...");
+    for (
+      let i = Math.max(2, currentPage - delta);
+      i <= Math.min(totalPages - 1, currentPage + delta);
+      i++
+    ) {
+      pages.push(i);
     }
+    if (currentPage < totalPages - delta - 1) pages.push("...");
+    if (totalPages > 1) pages.push(totalPages);
 
-    return pages;
+    return [...new Set(pages)];
   };
 
   if (totalPages <= 1) return null;
@@ -62,85 +52,70 @@ export default function Pagination({ currentPage, totalPages, total }: Props) {
   const pages = getPageNumbers();
 
   return (
-    <div className="flex flex-col items-center gap-4 mt-8">
-      {/* Page Info */}
+    <div className="flex flex-col items-center gap-6 mt-12">
       <p className="text-sm text-gray-600 dark:text-gray-400">
-        Showing page <span className="font-medium">{currentPage}</span> of{" "}
-        <span className="font-medium">{totalPages}</span> ({total} total posts)
+        Page{" "}
+        <span className="font-semibold text-gray-900 dark:text-white">
+          {currentPage}
+        </span>{" "}
+        of{" "}
+        <span className="font-semibold text-gray-900 dark:text-white">
+          {totalPages}
+        </span>
+        {" • "} Total: <span className="font-semibold">{total}</span>
       </p>
 
-      {/* Pagination Buttons */}
-      <div className="flex items-center gap-2">
-        {/* Previous Button */}
-        {currentPage > 1 ? (
-          <Link
-            href={buildUrl(currentPage - 1)}
-            className="flex items-center gap-1 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-          >
-            <ChevronLeft className="w-4 h-4" />
-            <span className="hidden sm:inline">Previous</span>
-          </Link>
-        ) : (
-          <button
-            disabled
-            className="flex items-center gap-1 px-4 py-2 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg opacity-50 cursor-not-allowed"
-          >
-            <ChevronLeft className="w-4 h-4" />
-            <span className="hidden sm:inline">Previous</span>
-          </button>
-        )}
+      <div className="flex items-center gap-2 flex-wrap justify-center">
+        <Link
+          href={buildUrl(currentPage - 1)}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-lg border transition-all ${
+            currentPage === 1
+              ? "bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-400 cursor-not-allowed"
+              : "bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700"
+          }`}
+          onClick={(e) => currentPage === 1 && e.preventDefault()}
+        >
+          <ChevronLeft className="w-4 h-4" />
+          <span className="hidden sm:inline">Previous</span>
+        </Link>
 
-        {/* Page Numbers */}
-        <div className="flex items-center gap-1">
-          {pages.map((page, index) => {
-            if (page === "...") {
-              return (
-                <span
-                  key={`ellipsis-${index}`}
-                  className="px-4 py-2 text-gray-400"
-                >
-                  ...
-                </span>
-              );
-            }
-
-            const pageNum = page as number;
-            const isActive = pageNum === currentPage;
-
+        {pages.map((page, i) => {
+          if (page === "...") {
             return (
-              <Link
-                key={pageNum}
-                href={buildUrl(pageNum)}
-                className={`px-4 py-2 rounded-lg transition-colors ${
-                  isActive
-                    ? "bg-blue-600 text-white font-medium"
-                    : "bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700"
-                }`}
-              >
-                {pageNum}
-              </Link>
+              <span key={`ellipsis-${i}`} className="px-3 py-2 text-gray-500">
+                ...
+              </span>
             );
-          })}
-        </div>
+          }
 
-        {/* Next Button */}
-        {currentPage < totalPages ? (
-          <Link
-            href={buildUrl(currentPage + 1)}
-            className="flex items-center gap-1 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-          >
-            <span className="hidden sm:inline">Next</span>
-            <ChevronRight className="w-4 h-4" />
-          </Link>
-        ) : (
-          <button
-            disabled
-            className="flex items-center gap-1 px-4 py-2 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg opacity-50 cursor-not-allowed"
-          >
-            <span className="hidden sm:inline">Next</span>
-            <ChevronRight className="w-4 h-4" />
-          </button>
-        )}
+          const pageNum = page as number;
+          return (
+            <Link
+              key={pageNum}
+              href={buildUrl(pageNum)}
+              className={`px-4 py-2.5 rounded-lg font-medium transition-all ${
+                pageNum === currentPage
+                  ? "bg-blue-600 text-white shadow-md"
+                  : "bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700"
+              }`}
+            >
+              {pageNum}
+            </Link>
+          );
+        })}
+
+        <Link
+          href={buildUrl(currentPage + 1)}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-lg border transition-all ${
+            currentPage === totalPages
+              ? "bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-400 cursor-not-allowed"
+              : "bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700"
+          }`}
+          onClick={(e) => currentPage === totalPages && e.preventDefault()}
+        >
+          <span className="hidden sm:inline">Next</span>
+          <ChevronRight className="w-4 h-4" />
+        </Link>
       </div>
     </div>
   );

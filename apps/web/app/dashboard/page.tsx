@@ -12,7 +12,9 @@ export const revalidate = 300;
 const DashboardPage = async () => {
   const session = await getSession();
 
-  if (!session) {
+  if (session?.user.role === "ADMIN") {
+    redirect("/admin");
+  } else if (!session) {
     redirect("/login");
   }
 

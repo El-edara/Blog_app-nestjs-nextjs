@@ -21,10 +21,8 @@ async function bootstrap() {
   );
 
   app.enableCors({
-    origin: process.env.ORIGIN || 'http://localhost:3000',
+    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
   });
   app.useGlobalFilters(new AllExceptionsFilter());
   app.useGlobalInterceptors(new ResponseInterceptor());

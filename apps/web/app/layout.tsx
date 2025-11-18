@@ -34,7 +34,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.className} antialiased bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-300`}
+        className={`${inter.className} antialiased bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300`}
       >
         <ThemeProvider
           attribute="class"
@@ -53,7 +53,7 @@ export default function RootLayout({
           {/* ✅ Toast Notifications */}
           <Toaster
             position="top-center"
-            richColors
+            theme="dark"
             closeButton
             duration={4000}
           />

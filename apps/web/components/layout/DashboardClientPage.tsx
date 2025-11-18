@@ -160,19 +160,27 @@ export default function DashboardClientPage({
         </div>
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            type: "spring",
+            stiffness: 400,
+            damping: 17,
+            duration: 0.5,
+            delay: 0.35,
+          }}
+          className="grid grid-cols-1 md:grid-cols-2 gap-6"
+        >
           {/* Manage Posts */}
           <motion.a
             href="/dashboard/my-posts"
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
             whileHover={{ y: -3 }}
             transition={{
               type: "spring",
               stiffness: 400,
               damping: 17,
               duration: 0.5,
-              delay: 0.3,
             }}
             className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-xs hover:shadow-md transition-shadow duration-200 dark:shadow-blue-500 cursor-pointer"
           >
@@ -194,15 +202,12 @@ export default function DashboardClientPage({
           {/* Profile */}
           <motion.a
             href="/profile"
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
             whileHover={{ y: -3 }}
             transition={{
               type: "spring",
               stiffness: 400,
               damping: 17,
               duration: 0.3,
-              delay: 0.35,
             }}
             className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-xs hover:shadow-md transition-shadow duration-200 dark:shadow-blue-500 cursor-pointer"
           >
@@ -220,7 +225,7 @@ export default function DashboardClientPage({
               </div>
             </div>
           </motion.a>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

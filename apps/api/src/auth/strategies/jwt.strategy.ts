@@ -5,16 +5,20 @@ import jwtConfig from '../config/jwt.config';
 import type { ConfigType } from '@nestjs/config';
 import { AuthService } from '../auth.service';
 import { AuthJwtPayload } from 'src/types/auth.jwtPayload';
+import { Request } from 'express';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
+export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(
     @Inject(jwtConfig.KEY)
     private jwtConfiguration: ConfigType<typeof jwtConfig>,
     private authService: AuthService,
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        (request: Request) => request?.cookies?.access_token || null,
+        ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ]),
       secretOrKey: jwtConfiguration.secret as string,
       ignoreExpiration: false,
     });
@@ -24,10 +28,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const user = await this.authService.findById(payload.sub);
     if (!user) throw new UnauthorizedException();
     return {
-      id: payload.sub,
-      email: payload.email,
-      name: payload.name,
-      role: payload.role,
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role,
     };
   }
 }

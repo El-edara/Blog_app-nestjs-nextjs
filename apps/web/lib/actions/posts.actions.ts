@@ -2,9 +2,9 @@
 
 import { revalidatePath } from "next/cache";
 import { API_URL } from "../constants";
-import { authFetch } from "../authFetch";
 import { createPostSchema, updatePostSchema } from "../validations/post.schema";
 import { Post, PostsResponse } from "../types";
+import { authFetch } from "../authFetch";
 
 type ActionState = {
   success?: boolean;

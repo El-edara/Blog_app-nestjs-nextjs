@@ -22,6 +22,12 @@ import { RefreshAuthGuard } from 'src/common/guards/refresh-auth.guard';
 
 @Controller('auth')
 export class AuthController {
+  cookieOptions = {
+    httpOnly: true,
+    sameSite: 'lax' as const,
+    secure: process.env.NODE_ENV === 'production',
+    path: '/',
+  };
   constructor(private readonly authService: AuthService) {}
 
   @Get('users')
@@ -40,22 +46,23 @@ export class AuthController {
     @Req() req: { user: User },
     @Res({ passthrough: true }) res: Response,
   ) {
-    // const { accessToken, refreshToken, user } = await this.authService.login(
-    //   req.user,
-    // );
     const result = await this.authService.login(req.user);
 
     res.cookie('access_token', result.accessToken, {
-      httpOnly: true,
-      sameSite: 'lax',
-      secure: false,
-      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+      ...this.cookieOptions,
+      maxAge: 15 * 60 * 1000, // 15 دقائق
+    });
+
+    res.cookie('refresh_token', result.refreshToken, {
+      ...this.cookieOptions,
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 أيام
     });
     return {
-      data: {
-        user: result.user,
-        accessToken: result.accessToken,
-        refreshToken: result.refreshToken,
+      user: {
+        id: result.id,
+        name: result.name,
+        email: result.email,
+        role: result.role,
       },
       message: 'Login successful',
     };
@@ -71,10 +78,14 @@ export class AuthController {
     await this.authService.logout(userId);
 
     res.clearCookie('access_token', {
+      path: '/',
       httpOnly: true,
       sameSite: 'lax',
-      secure: false,
+    });
+    res.clearCookie('refresh_token', {
       path: '/',
+      httpOnly: true,
+      sameSite: 'lax',
     });
     return { message: 'Logout successful' };
   }
@@ -87,10 +98,29 @@ export class AuthController {
 
   @UseGuards(RefreshAuthGuard)
   @Post('refresh')
-  refresh(@Req() req: { user: User }) {
-    return this.authService.refreshToken(req.user);
-  }
+  async refresh(
+    @Req() req: { user: User },
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const result = await this.authService.refreshToken(req.user);
 
+    res.cookie('access_token', result.accessToken, {
+      ...this.cookieOptions,
+      maxAge: 15 * 60 * 1000, // 15 دقائق
+    });
+
+    res.cookie('refresh_token', result.refreshToken, {
+      ...this.cookieOptions,
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 أيام
+    });
+    return {
+      id: result.id,
+      name: result.name,
+      email: result.email,
+      role: result.role,
+      message: 'Token refreshed successfully',
+    };
+  }
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('ADMIN')
   @Delete(':id')

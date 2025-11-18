@@ -85,15 +85,18 @@ export default function LoginForm() {
               required
               disabled={isPending}
             />
+            {/* ✅ Fixed: Handle array properly */}
             {state.error?.password && (
               <p className="text-sm text-red-500 mt-1">
-                {state.error.password}
+                {Array.isArray(state.error.password)
+                  ? state.error.password[0]
+                  : state.error.password}
               </p>
             )}
           </div>
 
           {/* Global Error */}
-          {state.message && !state.success && (
+          {state.message && !state.success && !state.error && (
             <div className="rounded bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-200 px-4 py-3">
               {state.message}
             </div>

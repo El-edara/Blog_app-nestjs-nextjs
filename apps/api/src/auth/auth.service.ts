@@ -75,6 +75,7 @@ export class AuthService {
     const payload: AuthJwtPayload = {
       sub: user.id,
       email: user.email,
+      name: user?.name || '',
       role: user.role,
     };
     const [accessToken, refreshToken] = await Promise.all([
@@ -92,12 +93,10 @@ export class AuthService {
     await this.updateRefreshToken(dbUser.id, refreshToken);
 
     return {
-      user: {
-        id: dbUser.id,
-        name: dbUser.name,
-        email: dbUser.email,
-        role: dbUser.role,
-      },
+      id: dbUser.id,
+      name: dbUser.name,
+      email: dbUser.email,
+      role: dbUser.role,
       accessToken,
       refreshToken,
       message: 'Login successful',
@@ -106,7 +105,9 @@ export class AuthService {
 
   async refreshToken(user: User) {
     const dbUser = await this.userService.findOneById(user.id);
-    if (!dbUser) throw new UnauthorizedException('Invalid credentials');
+    if (!dbUser?.hashedRefreshToken) {
+      throw new UnauthorizedException('No refresh token stored');
+    }
 
     const { accessToken, refreshToken } = await this.generateToken(dbUser);
     await this.updateRefreshToken(dbUser.id, refreshToken);
@@ -115,6 +116,7 @@ export class AuthService {
       id: dbUser.id,
       name: dbUser.name,
       email: dbUser.email,
+      role: dbUser.role,
       accessToken,
       refreshToken,
     };
@@ -127,13 +129,25 @@ export class AuthService {
   }
 
   async validateRefreshToken(id: number, refreshToken: string) {
-    const user = await this.userService.findOneById(id);
-    if (!user || !user.hashedRefreshToken)
-      throw new UnauthorizedException('Invalid refresh token');
+    try {
+      const user = await this.userService.findOneById(id);
+      if (!user || !user.hashedRefreshToken)
+        throw new UnauthorizedException('Invalid refresh token');
 
-    const isValid = await argon2.verify(user.hashedRefreshToken, refreshToken);
-    if (!isValid) throw new UnauthorizedException('Refresh token mismatch');
-    return this.excludePassword(user);
+      const isValid = await argon2.verify(
+        user.hashedRefreshToken,
+        refreshToken,
+      );
+      if (!isValid) throw new UnauthorizedException('Refresh token mismatch');
+      return this.excludePassword(user);
+    } catch (err) {
+      // ✅ امسح الـ refresh token لو invalid
+      await this.prisma.user.update({
+        where: { id },
+        data: { hashedRefreshToken: null },
+      });
+      throw new UnauthorizedException('Refresh token is not valid.');
+    }
   }
 
   async remove(id: number) {

@@ -1,35 +1,22 @@
-import { refreshSessionToken } from "./actions/auth.action";
-import { getSession } from "./session";
+import { getAuthTokens } from "./utils/cookies";
 
-export interface FetchOptions extends RequestInit {
-  headers?: Record<string, string>;
-}
+export async function authFetch(
+  input: string | URL | Request,
+  init?: RequestInit
+): Promise<Response> {
+  const { accessToken } = await getAuthTokens();
 
-export const authFetch = async (
-  url: string | URL,
-  options: FetchOptions = {}
-) => {
-  const session = await getSession();
+  const headers = new Headers(init?.headers);
 
-  options.headers = {
-    ...options.headers,
-    Authorization: `Bearer ${session?.accessToken}`,
-  };
-  let response = await fetch(url, options);
-  console.log({
-    StaTTTTTTTTTTTTTTTTTTTTUS: response.status,
+  if (accessToken) {
+    headers.set("Authorization", `Bearer ${accessToken}`);
+  }
+
+  const response = await fetch(input, {
+    ...init,
+    headers,
+    credentials: "include",
   });
 
-  if (response.status === 401) {
-    if (!session?.refreshToken) throw new Error("refresh token not found!");
-
-    const newAccessToken = await refreshSessionToken(session.refreshToken);
-
-    if (newAccessToken) {
-      options.headers.Authorization = `Bearer ${newAccessToken}`;
-      response = await fetch(url, options);
-    }
-  }
   return response;
-};
-// بستخمل لما الاكسس توكن يخلص اعمل رفريش للتوكن و جرب تاني الطلب (Authorization header.)
+}

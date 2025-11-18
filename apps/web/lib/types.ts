@@ -11,28 +11,15 @@ export interface User {
   comments?: Comment[];
 }
 
-export interface AuthResponse {
-  user: User;
-  accessToken: string;
-  message?: string;
-}
-
 export type SessionUser = {
   id: number;
   email: string;
-  name?: string;
+  name?: string | null;
   role?: "USER" | "ADMIN";
 };
 
-export type SessionPayload = {
+export type Session = {
   user: SessionUser;
-  accessToken: string;
-  refreshToken: string;
-};
-
-export type Session = SessionPayload & {
-  iat?: number;
-  exp?: number;
 };
 
 export type UpdateProfileDto = {

@@ -15,7 +15,7 @@ export default function RegisterForm() {
   const router = useRouter();
   const [state, formAction, isPending] = useActionState(registerAction, {});
 
-  // ✅ Handle success - بيتنفذ مرة واحدة بس
+  // ✅ Handle success
   useEffect(() => {
     if (state.success) {
       toast.success("Account created successfully! 🎉");
@@ -138,7 +138,7 @@ export default function RegisterForm() {
           </div>
 
           {/* Global Error */}
-          {state.message && !state.success && (
+          {state.message && !state.success && !state.error && (
             <div className="rounded bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-200 px-4 py-3">
               {state.message}
             </div>

@@ -32,6 +32,10 @@ export function NavbarClient({ session }: NavbarClientProps) {
         : "text-gray-600 dark:text-gray-300 hover:text-blue-500"
     }`;
 
+  const username =
+    session?.user?.name || session?.user?.email?.split("@")[0] || "User";
+
+  const isAdmin = session?.user.role === "ADMIN";
   return (
     <>
       <nav className="sticky top-0 z-50 w-full border-b bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg">
@@ -39,27 +43,45 @@ export function NavbarClient({ session }: NavbarClientProps) {
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <Link href="/" className="font-bold text-xl shrink-0">
-              <span className="bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              <span
+                className="bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent
+              mr-2"
+              >
                 Blogify
               </span>
             </Link>
 
             {/* ✅ Desktop Menu */}
-            <div className="hidden md:flex items-center gap-6">
+            <div className="hidden md:flex items-center gap-4 overflow-x-auto scrollbar-hide whitespace-nowrap p-2">
               <Link href="/" className={linkClass("/")}>
                 Home
               </Link>
-
-              {/* ✅ All Posts */}
               <Link href="/posts" className={linkClass("/posts")}>
                 Posts
               </Link>
 
+              {/* Dashboard → للـ user العادي فقط */}
+              {session && !isAdmin && (
+                <Link href="/dashboard" className={linkClass("/dashboard")}>
+                  Dashboard
+                </Link>
+              )}
+
+              {/* Admin → للـ admin فقط */}
+              {session && isAdmin && (
+                <Link href="/admin" className={linkClass("/admin")}>
+                  <span className="flex items-center gap-1">
+                    Admin Dashboard
+                    <span className="text-xs bg-red-600 text-white px-1.5 py-0.5 rounded">
+                      !
+                    </span>
+                  </span>
+                </Link>
+              )}
+
+              {/* اللينكات المشتركة */}
               {session && (
                 <>
-                  <Link href="/dashboard" className={linkClass("/dashboard")}>
-                    Dashboard
-                  </Link>
                   <Link href="/profile" className={linkClass("/profile")}>
                     Profile
                   </Link>
@@ -81,10 +103,10 @@ export function NavbarClient({ session }: NavbarClientProps) {
                 // ✅ Logged in state
                 <div className="flex items-center gap-3">
                   <Link href="/profile">
-                    <div className="flex items-center gap-2 px-3 py-1.5 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                    <div className="w-max flex items-center gap-2 px-3 py-1.5 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                       <User className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                       <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
-                        {session.user.name || session.user.email.split("@")[0]}
+                        {username}
                       </span>
                     </div>
                   </Link>

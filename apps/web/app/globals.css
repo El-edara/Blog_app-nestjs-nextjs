@@ -150,3 +150,26 @@ body.theme-transition {
     fill 0.4s ease,
     stroke 0.4s ease;
 }
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar styles */
+.scrollbar-hide::-webkit-scrollbar {
+  height: 2px;
+}
+
+.scrollbar-hide::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-hide::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
+
+.scrollbar-hide::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
