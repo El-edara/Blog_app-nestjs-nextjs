@@ -35,4 +35,4 @@ async function bootstrap() {
   await app.listen(port);
   console.log(`🚀 API is running on http://localhost:${port}`);
 }
-void bootstrap();
+export default bootstrap();
