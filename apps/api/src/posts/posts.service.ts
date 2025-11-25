@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { FindAllPostsDto } from './dto/find-all-posts.dto';
 import { Prisma, User } from '@prisma/client';
 

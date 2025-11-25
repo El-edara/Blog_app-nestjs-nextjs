@@ -3,7 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
-import { AllExceptionsFilter } from './common/HttpExceptionFilter';
+import { HttpExceptionsFilter } from './common/filters/HttpExceptionFilter';
 import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
@@ -24,7 +24,7 @@ async function bootstrap() {
     origin: process.env.FRONTEND_URL || 'http://localhost:3000',
     credentials: true,
   });
-  app.useGlobalFilters(new AllExceptionsFilter());
+  app.useGlobalFilters(new HttpExceptionsFilter());
   app.useGlobalInterceptors(new ResponseInterceptor());
 
   app.use(helmet());

@@ -11,14 +11,14 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
-import { CurrentUser } from 'src/common/decorators/current-user.decorator';
+import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { User } from '@prisma/client';
-import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
-import { LocalAuthGuard } from 'src/common/guards/local-auth.guard';
-import { Roles } from 'src/common/decorators/roles.decorators';
-import { RolesGuard } from 'src/common/guards/role.guard';
+import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import { LocalAuthGuard } from '../common/guards/local-auth.guard';
+import { Roles } from '../common/decorators/roles.decorators';
+import { RolesGuard } from '../common/guards/role.guard';
 import type { Response } from 'express';
-import { RefreshAuthGuard } from 'src/common/guards/refresh-auth.guard';
+import { RefreshAuthGuard } from '../common/guards/refresh-auth.guard';
 
 @Controller('auth')
 export class AuthController {

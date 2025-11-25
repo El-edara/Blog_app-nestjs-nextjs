@@ -13,14 +13,14 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { Roles } from 'src/common/decorators/roles.decorators';
+import { Roles } from '../common/decorators/roles.decorators';
 import { Role } from '@prisma/client';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { RolesGuard } from 'src/common/guards/role.guard';
-import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
+import { RolesGuard } from '../common/guards/role.guard';
+import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { CurrentUser } from 'src/common/decorators/current-user.decorator';
-import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { CurrentUser } from '../common/decorators/current-user.decorator';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 
 @Controller('users')
 export class UsersController {
@@ -70,7 +70,7 @@ export class UsersController {
   }
 
   @Roles(Role.ADMIN)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.findOne(id);

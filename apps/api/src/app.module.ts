@@ -1,6 +1,5 @@
-import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { Module } from '@nestjs/common';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
@@ -15,11 +14,11 @@ import { AdminModule } from './admin/admin.module';
   imports: [
     ThrottlerModule.forRoot([
       {
-        ttl: 60,
-        limit: 20,
+        ttl: 60000,
+        limit: 100,
       },
     ]),
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),
     PrismaModule,
     AuthModule,
     UsersModule,
@@ -29,6 +28,6 @@ import { AdminModule } from './admin/admin.module';
     AdminModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [],
 })
 export class AppModule {}

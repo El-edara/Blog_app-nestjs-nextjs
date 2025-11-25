@@ -6,9 +6,9 @@ import jwtConfig from './config/jwt.config';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
-import { PrismaModule } from 'src/prisma/prisma.module';
+import { PrismaModule } from '../prisma/prisma.module';
 import refreshJwtConfig from './config/refresh-jwt.config';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from '../users/users.service';
 import { RefreshJwtStrategy } from './strategies/refresh-jwt.strategy';
 
 @Module({
