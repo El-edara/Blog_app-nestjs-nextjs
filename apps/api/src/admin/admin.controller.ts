@@ -9,15 +9,10 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { AdminService } from './admin.service';
-<<<<<<< HEAD
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/role.guard';
 import { Roles } from '../common/decorators/roles.decorators';
-=======
-import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
-import { RolesGuard } from 'src/common/guards/role.guard';
-import { Roles } from 'src/common/decorators/roles.decorators';
->>>>>>> 8006af993e19f2f99d00d8f719249b05777cdf47
+
 import { Role } from '@prisma/client';
 
 @Controller('admin')

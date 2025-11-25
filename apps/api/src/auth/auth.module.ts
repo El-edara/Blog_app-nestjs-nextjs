@@ -6,15 +6,10 @@ import jwtConfig from './config/jwt.config';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
-<<<<<<< HEAD
 import { PrismaModule } from '../prisma/prisma.module';
 import refreshJwtConfig from './config/refresh-jwt.config';
 import { UsersService } from '../users/users.service';
-=======
-import { PrismaModule } from 'src/prisma/prisma.module';
-import refreshJwtConfig from './config/refresh-jwt.config';
-import { UsersService } from 'src/users/users.service';
->>>>>>> 8006af993e19f2f99d00d8f719249b05777cdf47
+
 import { RefreshJwtStrategy } from './strategies/refresh-jwt.strategy';
 
 @Module({

@@ -3,11 +3,8 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-<<<<<<< HEAD
 import { PrismaService } from '../prisma/prisma.service';
-=======
-import { PrismaService } from 'src/prisma/prisma.service';
->>>>>>> 8006af993e19f2f99d00d8f719249b05777cdf47
+
 import { CreateUserDto } from './dto/create-user.dto';
 import { omit } from 'lodash';
 import * as argon2 from 'argon2';

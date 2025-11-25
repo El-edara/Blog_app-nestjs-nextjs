@@ -13,13 +13,9 @@ import {
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
-<<<<<<< HEAD
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
-=======
-import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
-import { CurrentUser } from 'src/common/decorators/current-user.decorator';
->>>>>>> 8006af993e19f2f99d00d8f719249b05777cdf47
+
 import type { User } from '@prisma/client';
 
 @Controller('comments')
