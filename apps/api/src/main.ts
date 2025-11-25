@@ -25,14 +25,17 @@ async function bootstrap() {
     origin: process.env.FRONTEND_URL || 'http://localhost:3000',
     credentials: true,
   });
+  await app.init();
   app.useGlobalFilters(new HttpExceptionsFilter());
 
   app.useGlobalInterceptors(new ResponseInterceptor());
 
   app.use(helmet());
   app.use(cookieParser());
+
   const port = process.env.PORT ?? 4000;
   await app.listen(port);
   console.log(`🚀 API is running on http://localhost:${port}`);
+  return app.getHttpAdapter().getInstance();
 }
 export default bootstrap();
