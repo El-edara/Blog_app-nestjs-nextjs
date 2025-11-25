@@ -13,6 +13,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
+<<<<<<< HEAD
 import { Roles } from '../common/decorators/roles.decorators';
 import { Role } from '@prisma/client';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -21,6 +22,16 @@ import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
+=======
+import { Roles } from 'src/common/decorators/roles.decorators';
+import { Role } from '@prisma/client';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { RolesGuard } from 'src/common/guards/role.guard';
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { CurrentUser } from 'src/common/decorators/current-user.decorator';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+>>>>>>> 8006af993e19f2f99d00d8f719249b05777cdf47
 
 @Controller('users')
 export class UsersController {
@@ -70,7 +81,11 @@ export class UsersController {
   }
 
   @Roles(Role.ADMIN)
+<<<<<<< HEAD
   @UseGuards(JwtAuthGuard, RolesGuard)
+=======
+  @UseGuards(JwtAuthGuard)
+>>>>>>> 8006af993e19f2f99d00d8f719249b05777cdf47
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.findOne(id);

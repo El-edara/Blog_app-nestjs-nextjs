@@ -5,7 +5,11 @@ import {
 } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+<<<<<<< HEAD
 import { PrismaService } from '../prisma/prisma.service';
+=======
+import { PrismaService } from 'src/prisma/prisma.service';
+>>>>>>> 8006af993e19f2f99d00d8f719249b05777cdf47
 import { FindAllPostsDto } from './dto/find-all-posts.dto';
 import { Prisma, User } from '@prisma/client';
 

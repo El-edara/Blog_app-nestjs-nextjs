@@ -5,7 +5,11 @@ import {
 } from '@nestjs/common';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
+<<<<<<< HEAD
 import { PrismaService } from '../prisma/prisma.service';
+=======
+import { PrismaService } from 'src/prisma/prisma.service';
+>>>>>>> 8006af993e19f2f99d00d8f719249b05777cdf47
 import { User } from '@prisma/client';
 
 @Injectable()

@@ -5,15 +5,26 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+<<<<<<< HEAD
 import { PrismaService } from '../prisma/prisma.service';
+=======
+import { PrismaService } from 'src/prisma/prisma.service';
+>>>>>>> 8006af993e19f2f99d00d8f719249b05777cdf47
 import { RegisterDto } from './dto/register.dto';
 import * as argon2 from 'argon2';
 import { omit } from 'lodash';
 import { User } from '@prisma/client';
+<<<<<<< HEAD
 import { AuthJwtPayload } from '../types/auth.jwtPayload';
 import refreshJwtConfig from './config/refresh-jwt.config';
 import type { ConfigType } from '@nestjs/config';
 import { UsersService } from '../users/users.service';
+=======
+import { AuthJwtPayload } from 'src/types/auth.jwtPayload';
+import refreshJwtConfig from './config/refresh-jwt.config';
+import type { ConfigType } from '@nestjs/config';
+import { UsersService } from 'src/users/users.service';
+>>>>>>> 8006af993e19f2f99d00d8f719249b05777cdf47
 
 @Injectable()
 export class AuthService {

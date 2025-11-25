@@ -14,11 +14,19 @@ import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { FindAllPostsDto } from './dto/find-all-posts.dto';
+<<<<<<< HEAD
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { Role, type User } from '@prisma/client';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/role.guard';
 import { Roles } from '../common/decorators/roles.decorators';
+=======
+import { CurrentUser } from 'src/common/decorators/current-user.decorator';
+import { Role, type User } from '@prisma/client';
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
+import { RolesGuard } from 'src/common/guards/role.guard';
+import { Roles } from 'src/common/decorators/roles.decorators';
+>>>>>>> 8006af993e19f2f99d00d8f719249b05777cdf47
 
 @Controller('posts')
 export class PostsController {
